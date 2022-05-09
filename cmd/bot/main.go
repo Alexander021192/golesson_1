@@ -11,6 +11,10 @@ import (
 
 func main() {
 	token := os.Getenv("TOKEN")
+
+	// for debug
+	token = "5336531944:AAFJcRdar7XcEgMOdRjOT3PYvjjsAduF9jI"
+
 	bot, err := tgbotapi.NewBotAPI(token)
 	if err != nil {
 		log.Panic(err)
