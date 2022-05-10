@@ -1,8 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"io/ioutil"
 	"log"
-	"os"
 
 	"github.com/Alexander021192/bot/internal/app/commands"
 	"github.com/Alexander021192/bot/internal/service/product"
@@ -10,10 +11,13 @@ import (
 )
 
 func main() {
-	token := os.Getenv("TOKEN")
-
 	// for debug
-	token = "5336531944:AAFJcRdar7XcEgMOdRjOT3PYvjjsAduF9jI"
+	content, err := ioutil.ReadFile("./.env")
+	if err != nil {
+		log.Fatal(err)
+	}
+	token := string(content)
+	// fmt.Println(token)
 
 	bot, err := tgbotapi.NewBotAPI(token)
 	if err != nil {
