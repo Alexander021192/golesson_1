@@ -17,15 +17,22 @@ func (c *Commander) Get(inputMsg *tgbotapi.Message) {
 		return
 	}
 
-	product, err := c.productService.Get(idx)
+	product := c.productService.ReadProducts(idx, idx+1)
+	productTitle := ""
+	lenList, err := c.productService.Count()
 	if err != nil {
-		log.Printf("failed get product with idx %d: %v", idx, err)
 		return
+	}
+	if idx >= lenList || idx < 0 {
+		productTitle += fmt.Sprintf("not found product with number %d \n", idx)
+	}
+	for _, el := range product {
+		productTitle += el.Title + "\n"
 	}
 
 	msg := tgbotapi.NewMessage(
 		inputMsg.Chat.ID,
-		fmt.Sprintf("successfully parsed args: %v,\nproduct title: %v\n", idx, product.Title),
+		fmt.Sprintf("successfully parsed args: %v,\nproduct title: %v\n", idx, productTitle),
 	)
 	c.bot.Send(msg)
 }

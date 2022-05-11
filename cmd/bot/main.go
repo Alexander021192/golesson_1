@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 
@@ -34,6 +35,8 @@ func main() {
 	updates := bot.GetUpdatesChan(u)
 
 	productService := product.NewService()
+	productService.ReadProducts(0, 5)
+	fmt.Println(productService.Count())
 
 	commander := commands.NewCommander(bot, productService)
 

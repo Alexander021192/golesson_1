@@ -9,12 +9,16 @@ import (
 
 func (c *Commander) List(inputMsg *tgbotapi.Message) {
 	args := inputMsg.CommandArguments()
-
+	
+	currentPage := c.productService.CurrentPage()
 	page, err := strconv.Atoi(args)
 	if err != nil {
-		page = 1
+		*currentPage = 1
+	} else {
+		*currentPage = page
 	}
-	outputList := c.GetListData(page)
+	
+	outputList := c.GetListData(*currentPage)
 	msg := tgbotapi.NewMessage(inputMsg.Chat.ID, outputList)
 
 	// msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(
@@ -27,7 +31,29 @@ func (c *Commander) List(inputMsg *tgbotapi.Message) {
 }
 
 func (c *Commander) GetListData(page int) string {
-	products := c.productService.List(page)
+	start := 0
+	end, _ := c.productService.Count()
+	if end == 0 {
+		return "empty list product"
+	}
+
+	offset := (page - 1) * 5
+
+	last := 1
+	if end % 5 == 0 {
+		last = 0
+	}
+	if offset >= end || offset < 0 {
+		return fmt.Sprintf("wrong number page %d. Max page is %d", page, end/5 + last)
+	}
+
+	if offset < end {
+		start = offset
+	}
+	if offset+5 < end {
+		end = offset + 5
+	}
+	products := c.productService.ReadProducts(start, end)
 	listData := fmt.Sprintf("Products (page %d):\n", page)
 	for _, el := range products {
 		listData += el.Title + "\n"
