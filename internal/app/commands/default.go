@@ -42,6 +42,10 @@ func (c *Commander) HandleUpdate(update tgbotapi.Update) {
 			c.NextPage(update.Message)
 		case "get":
 			c.Get(update.Message)
+		case "new":
+			c.New(update.Message)
+		case "delete":
+			c.Delete(update.Message)
 		default:
 			c.Default(update.Message)
 		}
