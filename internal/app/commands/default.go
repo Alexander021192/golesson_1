@@ -14,7 +14,7 @@ func (c *Commander) Default(inputMsg *tgbotapi.Message) {
 	c.bot.Send(msg)
 }
 
-func (c *Commander) HandleUpdate(update tgbotapi.Update, currentPage *int) {
+func (c *Commander) HandleUpdate(update tgbotapi.Update) {
 
 	defer func() {
 		if panicValue := recover(); panicValue != nil {
@@ -39,7 +39,7 @@ func (c *Commander) HandleUpdate(update tgbotapi.Update, currentPage *int) {
 		case "list":
 			c.List(update.Message)
 		case "next_page":
-			c.NextPage(update.Message, currentPage)
+			c.NextPage(update.Message)
 		case "get":
 			c.Get(update.Message)
 		default:

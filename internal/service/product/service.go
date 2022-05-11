@@ -11,6 +11,7 @@ func (s *Service) List(page int) []Product {
 	end := len(allProducts)
 	offset := (page - 1) * 5
 	if end == 0 || offset > end {
+		currrentPage = 0
 		return []Product{{Title: "Finish list"}}
 	}
 
@@ -24,9 +25,15 @@ func (s *Service) List(page int) []Product {
 }
 
 func (s * Service) Get(idx int) (*Product, error) {
+	// need validation
+
 	return &allProducts[idx], nil
 }
 
 func (s * Service) Len() (int, error) {
 	return len(allProducts), nil
+}
+
+func (s * Service) CurrentPage() (*int, error) {
+	return &currrentPage, nil
 }

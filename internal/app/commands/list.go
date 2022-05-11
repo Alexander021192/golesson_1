@@ -2,12 +2,19 @@ package commands
 
 import (
 	"fmt"
-	
+	"strconv"
+
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 func (c *Commander) List(inputMsg *tgbotapi.Message) {
-	outputList := c.GetListData(1)
+	args := inputMsg.CommandArguments()
+
+	page, err := strconv.Atoi(args)
+	if err != nil {
+		page = 1
+	}
+	outputList := c.GetListData(page)
 	msg := tgbotapi.NewMessage(inputMsg.Chat.ID, outputList)
 
 	// msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(
@@ -16,13 +23,6 @@ func (c *Commander) List(inputMsg *tgbotapi.Message) {
 	// 	),
 	// )
 
-	c.bot.Send(msg)
-}
-
-func (c *Commander) NextPage (inputMsg *tgbotapi.Message, currentPage *int) {
-	outputList := c.GetListData(*currentPage + 1)
-	*currentPage = *currentPage + 1
-	msg := tgbotapi.NewMessage(inputMsg.Chat.ID, outputList)
 	c.bot.Send(msg)
 }
 

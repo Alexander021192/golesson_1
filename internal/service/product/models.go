@@ -9,6 +9,8 @@ var allProducts = []Product{
 	{Title: "three3"},
 }
 
+var currrentPage = 1
+
 type Product struct {
 	Title string
 }
